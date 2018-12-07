@@ -13,13 +13,11 @@ public class day7 {
 
 	public static void main(String[] args) throws IOException {
 		long startTime = System.currentTimeMillis();
-
 		ReadInput read = new ReadInput();
 //        List<String> inputList = read.readFile("7input.txt");
         List<String> inputList = read.readFile("7input2.txt");
 	
 		day7 day = new day7();
-
 		System.out.println("inputList:" + inputList.size());
         String answer = day.findFrequency(inputList);
 		System.out.println("answer:" + answer);
@@ -32,13 +30,10 @@ public class day7 {
         //Step C must be finished before step A can begin.
         //C -> A
         Multimap<String, String> comesBefore = HashMultimap.create();
-
         //A -> C
         Multimap<String, String> comesAfter = HashMultimap.create();
 
-
         Set<String> allNodes = new HashSet<String>();
-
         for (String input : list) {
             String[] split = input.split(" ");
             comesBefore.put(split[1], split[7]);
@@ -83,7 +78,6 @@ public class day7 {
             }
 
             List<String> next = dependenciesMeet.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
-            //next.removeAll(seen);
             System.out.println("Current:" + next + "   dependenciesMeet:" + dependenciesMeet + " started:" + started + " finished:" + finished);
             System.out.println("workers:"+ workers);
             //find free workers based on current time, and start work
@@ -99,12 +93,9 @@ public class day7 {
                         worker.object = nextS;
                         System.out.println("Started: " + workers.indexOf(worker) + "->" + worker);
                     }
-
                 }
             }
             System.out.println("path:" + path.toString());
-
-
             //find finished workers, and complete the work
             List<Integer> finishedTime = workers.stream()
                     .map(w -> w.time).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
@@ -131,10 +122,6 @@ public class day7 {
             System.out.println("time: " + time);
         }
         System.out.println("total time: " + time);
-
-        //968
-
-
         return path.toString();
 	}
 
@@ -153,11 +140,7 @@ public class day7 {
 
         @Override
         public String toString() {
-            return "W{" +
-                    "WorkTill=" + time +
-                    ", on object='" + object + '\'' +
-                    '}';
+            return "W{" + "WorkTill=" + time + ", on object='" + object + '\'' + '}';
         }
     }
-
 }
