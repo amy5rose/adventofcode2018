@@ -1,3 +1,4 @@
+import common.DayBase;
 import common.ReadInput;
 
 import java.io.IOException;
@@ -7,24 +8,29 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class day9star2 {
+public class day9star2 extends DayBase {
 
 	public static void main(String[] args) throws IOException {
-		long startTime = System.currentTimeMillis();
-		ReadInput read = new ReadInput();
-//        List<String> inputList = read.readInput("9 players; last marble is worth 25 points");
-        List<String> inputList = read.readInput("430 players; last marble is worth 71588 points");
-	
 		day9star2 day = new day9star2();
-		System.out.println("inputList:" + inputList.size());
-        String answer = day.findFrequency(inputList);
-		System.out.println("answer:" + answer);
-		
-		long endTime = System.currentTimeMillis();
-		System.out.println("program running time:" + (endTime-startTime));
+        day.run();
 	}
 
-	public String findFrequency(List<String> list) {
+    @Override
+    public String getSampleInputString() {
+        return "9 players; last marble is worth 25 points";
+    }
+
+    @Override
+    public String getSampleAnswer() {
+        return "22563";
+    }
+
+    @Override
+    public String getRealInputFile() {
+        return "9input.txt";
+    }
+
+    public String findAnswer(List<String> list) {
         String[] listS = list.get(0).split(" ");
         int players = Integer.valueOf(listS[0]);
         int marbles = Integer.valueOf(listS[6]) * 100;
@@ -40,8 +46,6 @@ public class day9star2 {
         game.next = game;
         game.previous = game;
 
-        currentPlayer = 0;
-
         for(int currentMarble = 1; currentMarble <= marbles; currentMarble++, currentPlayer = (currentPlayer+1)% players ) {
             if(currentMarble % 23 == 0) {
                 int score = currentMarble;
@@ -56,7 +60,6 @@ public class day9star2 {
             //head.print();
         }
         System.out.println("scores:" + scores);
-
         long max = scores.values().stream().max(Comparator.naturalOrder()).get();
         return max + "";
     }
@@ -102,11 +105,6 @@ public class day9star2 {
 	            next = next.next;
             }
             System.out.println(" ");
-
         }
     }
-//[-] (0)
-//[1]  0 (1)
-//[1]  0 0 0 0 0 0
-//[2]  0 2 1 0 2 1
 }
