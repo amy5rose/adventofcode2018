@@ -9,10 +9,39 @@ import java.util.Map.Entry;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import common.DayBase;
 import common.ReadInput;
 
-public class day4star2 {
-	
+public class day4star2 extends DayBase {
+
+	public static void main(String[] args) throws IOException {
+		day4star2 day = new day4star2();
+		day.run();
+	}
+
+	@Override
+	public String getSampleInputString() {
+		return "[1518-11-01 00:00] Guard #10 begins shift\r\n" +
+				"[1518-11-01 00:05] falls asleep\r\n" +
+				"[1518-11-01 00:55] wakes up\r\n" +
+				"[1518-11-01 23:58] Guard #99 begins shift\r\n" +
+				"[1518-11-02 00:40] falls asleep\r\n" +
+				"[1518-11-02 00:50] wakes up\r\n" +
+				"[1518-11-01 00:25] wakes up\r\n" +
+				"[1518-11-01 00:30] falls asleep\r\n";
+	}
+
+	@Override
+	public String getSampleAnswer() {
+		return "3960";
+	}
+
+	@Override
+	public String getRealInputFile() {
+		return "4input2.txt";
+	}
+
+
 	public class guard {
 		int year;
 		int month;
@@ -39,50 +68,11 @@ public class day4star2 {
 		
 	}
 
-	public static void main(String[] args) throws IOException {
-		String input = 
-				"[1518-11-01 00:00] Guard #10 begins shift\r\n" + 
-				"[1518-11-01 00:05] falls asleep\r\n" + 
-				"[1518-11-01 00:55] wakes up\r\n" + 
-				"[1518-11-01 23:58] Guard #99 begins shift\r\n" + 
-				"[1518-11-02 00:40] falls asleep\r\n" + 
-				"[1518-11-02 00:50] wakes up\r\n" +
-				"[1518-11-01 00:25] wakes up\r\n" + 
-				"[1518-11-01 00:30] falls asleep\r\n" ;
-
-		ReadInput read = new ReadInput();
-//		List<String> inputList = read.readInput(input);
-		List<String> inputList = read.readFile("4input.txt");
-		System.out.println("size: " + inputList.size());
-
-		
-		day4star2 day = new day4star2();
-		List<guard> guardList = day.parseInput(inputList); 
-	}
-	
-	public List<guard> parseInput(List<String> list) {
+	@Override
+	public String findAnswer(List<String> list) {
 		List<guard> guards = new ArrayList<guard>();
+		Collections.sort(list);
 
-		Comparator<guard> valueComparator = new Comparator<guard>() {
-			@Override
-			public int compare(guard g1, guard g2) {
-				if (g1.year - g2.year != 0) {
-					return g1.year - g2.year;
-				}
-				if (g1.month - g2.month != 0) {
-					return g1.month - g2.month;
-				}
-				if (g1.day - g2.day != 0) {
-					return g1.day - g2.day;
-				}
-				if (g1.hour - g2.hour != 0) {
-					return g1.hour - g2.hour;
-				}
-				if (g1.minute - g2.minute != 0) {
-					return g1.minute - g2.minute;
-				}
-				return 0;
-			}};
 	    Multimap<Integer, guard> timeMap = HashMultimap.create();
 
 		for(String item: list) {
@@ -105,7 +95,7 @@ public class day4star2 {
 			guards.add(g);
 			timeMap.put(g.getDayStamp(), g);
 		}		
-		Collections.sort(guards, valueComparator);
+
 		System.out.println("Ordered guard List: " + guards);
 		int gID = -1;
 		for (guard g: guards) {
@@ -193,6 +183,6 @@ public class day4star2 {
 
 		System.out.println("solution part 1:" + maxMinuteIndex * maxGID);	
 		System.out.println("solution part 2:" + answer);	
-		return guards;
+		return answer+"";
 	}
 }

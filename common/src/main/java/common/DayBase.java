@@ -18,10 +18,10 @@ public abstract class DayBase {
         System.out.println("\nsample program running time:" + (endTime-startTime));
 
 		if(!getSampleAnswer().equals(answer)) {
-            System.out.println("Sample is wrong!");
+            System.out.println("Sample is wrong! Expected:" + getSampleAnswer());
             return;
         }
-        System.out.println("-------------------------------------------------------------");
+        System.out.println("-----------------------------------------------------------------------------");
 
         startTime = System.currentTimeMillis();
 
