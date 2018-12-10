@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import common.MatrixHelper;
 import common.ReadInput;
 
 public class day6 {
@@ -47,7 +48,7 @@ public class day6 {
 		}
 		
 		HashMap<String, Point> map = new HashMap<>();
-		inititalizeGrid(grid);
+		MatrixHelper.inititalizeGrid(grid, ".");
 		char c = 'A';
 		
 		for(String pointS : list) {
@@ -60,14 +61,14 @@ public class day6 {
 			grid[point.x][point.y] = loc;
 			c = (char) (c + 1);
 		}
-		printGrid(grid, false);
+		MatrixHelper.printGrid(grid, false);
 		
 		HashMap<String, Integer> size = new HashMap<>();
 		Set<String> edgePieces = new HashSet<> ();
 		int part2Area = 0;
 		for (int i = 0; i < grid.length  ; i ++) {
 			for (int j = 0; j < grid.length; j ++) {
-				
+
 				int min = Integer.MAX_VALUE;
 				String minPoint = null;
 				int part2Distance = 0;
@@ -76,10 +77,10 @@ public class day6 {
 					if (dist == 0) {
 						minPoint = "@";
 					}
-						
+
 					if (dist == min) {
 						min = dist;
-						minPoint = null; 
+						minPoint = null;
 					}
 					if (dist < min) {
 						min = dist;
@@ -87,20 +88,20 @@ public class day6 {
 					}
 					part2Distance += dist;
 				}
-				
+
 				if(grid.length == 10  && part2Distance < 32 ) {
 					part2Area++;
 				}
 				if(grid.length == 400  && part2Distance < 10000 ) {
 					part2Area++;
 				}
-				
+
 				grid[i][j] = minPoint == null? "." : minPoint.toLowerCase();
-				printGrid(grid, false);
-				
+				MatrixHelper.printGrid(grid, false);
+
 				size.put(minPoint, size.getOrDefault(minPoint, 0)+1);
 //				System.out.println( "<" + i + "," + j + ">" + " : " + min + " ::: " +  minPoint + " : " + size.get(minPoint));
-				
+
 				if (isEdge(i,j, grid.length)) {
 					edgePieces.add(minPoint);
 				}
@@ -110,7 +111,7 @@ public class day6 {
 //		System.out.println(size.size() + " :: size:" + size);
 		Optional<Integer> smallestsize = size.entrySet().stream()
 				.filter(e -> e == null || !edgePieces.contains(e.getKey()))
-				.map(e ->  e.getValue())
+				.map(Entry::getValue)
 				.max(Comparator.naturalOrder());
 		
 		System.out.println("Part 2 Area:" + part2Area);
@@ -118,49 +119,14 @@ public class day6 {
 	}
 	
 	int distance(Point p, int x, int y) {
-//		if(p.equals(new Point(x,y))) {
-//			return Integer.MAX_VALUE;
-//		}
 		return Math.abs(p.x - x) + Math.abs(p.y-y); 
 	}
 	
 	
 	boolean isEdge(int x, int y, int edge) {
-		if(x == 0 || x == edge-1 ) {
+		if (x == 0 || x == edge-1 ) {
 			return true;
 		}
-		if(y == 0 || y == edge-1 ) {
-			return true;
-		}
-		return false;
+		return y == 0 || y == edge - 1;
 	}
-	
-	void inititalizeGrid(String[][] grid) {
-		for (int i = 0; i < grid.length  ; i ++) {
-			for (int j = 0; j < grid.length; j ++) {
-				if(grid[i][j] == null) {
-					grid[i][j] = "."; //side-effect, initialize to '*'
-				}
-			}
-		}
-	}
-	void printGrid(String[][] grid) {
-		printGrid(grid, false); 
-			
-	}
-		
-	void printGrid(String[][] grid, boolean force) {
-		for (int i = 0; i < grid.length  ; i ++) {
-			for (int j = 0; j < grid.length; j ++) {
-				if((force && i < 50 && j <50) || grid.length < 15) {
-					System.out.print(grid[i][j]);
-				}
-			}
-
-			if((force && i < 50) || grid.length < 15) {
-				System.out.println("");
-			}
-		}
-	}
-
 }

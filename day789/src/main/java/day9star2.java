@@ -26,7 +26,7 @@ public class day9star2 extends DayBase {
     }
 
     @Override
-    public String getRealInputFile() {
+    public String getRealInputString() {
         return "9input.txt";
     }
 

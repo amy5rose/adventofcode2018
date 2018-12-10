@@ -155,7 +155,7 @@ public class day4 {
 			}
 		}
 		System.out.println("guard asleep most:" + maxGID);
-		
+
 		start = -1;
 		int maxMinuteIndex = 0;
 		ArrayList<Integer> sleepTime = new ArrayList<>(70);

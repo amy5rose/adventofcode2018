@@ -8,7 +8,21 @@ import java.io.*;
 
 public class ReadInput {
 
-	public List<String> readInput(String input) {
+	boolean isFile(String input) {
+		return input.contains(".txt");
+	}
+
+
+	public List<String> readInput(String input) throws IOException {
+		if(isFile(input)) {
+			return readFile(input);
+		}
+		else {
+			return readInputString(input);
+		}
+	}
+
+	public List<String> readInputString(String input) {
 		List<String> list = new ArrayList<String>(); 
 		for (String item : input.split("\r\n")) {
 			list.add(String.valueOf(item));

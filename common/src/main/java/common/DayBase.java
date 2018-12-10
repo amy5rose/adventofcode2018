@@ -8,6 +8,7 @@ public abstract class DayBase {
 	public void run() throws IOException {
 		long startTime = System.currentTimeMillis();
 		ReadInput read = new ReadInput();
+
 		List<String> inputList = read.readInput(getSampleInputString());
 		System.out.println("sample inputList:" + inputList.size());
 
@@ -25,7 +26,7 @@ public abstract class DayBase {
 
         startTime = System.currentTimeMillis();
 
-        inputList = read.readFile(getRealInputFile());
+        inputList = read.readInput(getRealInputString());
         System.out.println("final inputList:" + inputList.size());
 
         String finalAnswer = findAnswer(inputList);
@@ -38,7 +39,7 @@ public abstract class DayBase {
     public abstract String getSampleInputString();
     public abstract String getSampleAnswer();
 
-    public abstract String getRealInputFile();
+    public abstract String getRealInputString();
 
     public abstract String findAnswer(List<String> list);
 }

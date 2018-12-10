@@ -1,7 +1,11 @@
 import common.DayBase;
+import common.MatrixHelper;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class day10 extends DayBase {
 
@@ -12,20 +16,141 @@ public class day10 extends DayBase {
 
     @Override
     public String getSampleInputString() {
-        return "";
+        return "10input.txt";
     }
 
     @Override
     public String getSampleAnswer() {
-        return "";
+        return "3";
     }
 
     @Override
-    public String getRealInputFile() {
-        return "10input.txt";
+    public String getRealInputString() {
+        return "10input2.txt";
     }
 
     public String findAnswer(List<String> list) {
-	    return "";
+	    ArrayList<Star> stars = new ArrayList<>();
+
+	    int max = 0;
+	    for(String input : list ) {
+            String[] values = input.split("[ @,:x#<>]+");
+            Star s = new Star(values[2], values[1], values[5],values[4]);
+	        stars.add(s);
+        }
+
+//	    int scaleX = stars.stream().map(s -> s.pointOriginal.x).min(Comparator.naturalOrder()).get();
+//        int scaleY = stars.stream().map(s -> s.pointOriginal.y).min(Comparator.naturalOrder()).get();
+
+//        stars.stream().forEach(s -> s.scaleStar(scaleX, scaleY));
+        //stars.stream().forEach(s -> System.out.println(s.toString()));
+
+        int i = 0;
+        int testX = Integer.MAX_VALUE;
+        for(i = 0; i < 100000000; i ++) {
+            for (Star star : stars) {
+               star.increment();
+            }
+            int currentX = stars.stream().map(s -> s.point.x).max(Comparator.naturalOrder()).get();
+            int cMinX = stars.stream().map(s -> s.point.x).min(Comparator.naturalOrder()).get();
+            currentX = currentX - cMinX;
+           // System.out.println("X:" + currentX);
+
+            if (currentX < testX) {
+                testX = currentX;
+            } else {
+                printSolution(stars);
+                break;
+            }
+
+        }
+	    return i + "";
+    }
+
+    private void printSolution(ArrayList<Star> stars) {
+        stars.stream().forEach(s -> {s.reverse();} );
+
+        int minX = stars.stream().map(s -> s.point.x).min(Comparator.naturalOrder()).get();
+        int minY = stars.stream().map(s -> s.point.y).min(Comparator.naturalOrder()).get();
+        int maxX = stars.stream().map(s -> s.point.x).max(Comparator.naturalOrder()).get();
+        int maxY = stars.stream().map(s -> s.point.y).max(Comparator.naturalOrder()).get();
+        int max = Math.max(maxX, maxY) + 1;
+        int min = Math.min(minX, minY);
+
+        String[][] grid = new String[maxX-minX+1][maxY-minY+1];
+        MatrixHelper.inititalizeGrid(grid, ".");
+        stars.stream().forEach(s -> {s.point.x -= minX; s.point.y -= minY; s.updateGrid(grid);} );
+
+        MatrixHelper.printGrid(grid, true);
+    }
+
+    class Star {
+	    Point pointOriginal;
+        Point point;
+	    Point speed;
+
+        public Star(String x, String y, String xVel, String yVel) {
+            this(Integer.valueOf(x), Integer.valueOf(y), Integer.valueOf(xVel), Integer.valueOf(yVel));
+        }
+
+        public Star(int x, int y, int xVel, int yVel) {
+            this.pointOriginal = new Point(x,y);
+            this.point = new Point(x,y);
+            this.speed = new Point(xVel,yVel);
+        }
+
+        public void scaleStar(int x, int y) {
+            this.point = new Point(Math.abs(x) + pointOriginal.x, Math.abs(y)  + pointOriginal.y);
+        }
+
+        void increment() {
+            point.x += speed.x;
+            point.y += speed.y;
+        }
+
+        void reverse() {
+            point.x -= speed.x;
+            point.y -= speed.y;
+        }
+
+
+        public Star(Point point, Point speed) {
+            this.point = point;
+            this.speed = speed;
+        }
+
+
+
+        public boolean updateGrid(String[][] grid) {
+            if(point.x >= 0  && point.y >= 0 ) {
+                if(point.x < grid.length && point.y < grid[0].length) {
+                    grid[point.x][point.y] = "X";
+                    return true;
+                }
+                System.out.println("error: " + point);
+            }
+            System.out.println("error: " + point);
+
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return "Star{" +
+                    "org=" + pointOriginal +
+                    "current=" + point +
+                    ", speed=" + speed +
+                    '}';
+        }
+
+        public boolean updateIncrementAndGrid(String[][] grid) {
+            if(point.x >= 0  && point.y >= 0 ) {
+                if(point.x < grid.length && point.y < grid[0].length) {
+                    grid[point.x][point.y] = ".";
+                }
+            }
+            increment();
+            return updateGrid(grid);
+        }
     }
 }
