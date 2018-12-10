@@ -39,12 +39,6 @@ public class day10 extends DayBase {
 	        stars.add(s);
         }
 
-//	    int scaleX = stars.stream().map(s -> s.pointOriginal.x).min(Comparator.naturalOrder()).get();
-//        int scaleY = stars.stream().map(s -> s.pointOriginal.y).min(Comparator.naturalOrder()).get();
-
-//        stars.stream().forEach(s -> s.scaleStar(scaleX, scaleY));
-        //stars.stream().forEach(s -> System.out.println(s.toString()));
-
         int i = 0;
         int testX = Integer.MAX_VALUE;
         for(i = 0; i < 100000000; i ++) {
@@ -54,7 +48,6 @@ public class day10 extends DayBase {
             int currentX = stars.stream().map(s -> s.point.x).max(Comparator.naturalOrder()).get();
             int cMinX = stars.stream().map(s -> s.point.x).min(Comparator.naturalOrder()).get();
             currentX = currentX - cMinX;
-           // System.out.println("X:" + currentX);
 
             if (currentX < testX) {
                 testX = currentX;
@@ -74,8 +67,6 @@ public class day10 extends DayBase {
         int minY = stars.stream().map(s -> s.point.y).min(Comparator.naturalOrder()).get();
         int maxX = stars.stream().map(s -> s.point.x).max(Comparator.naturalOrder()).get();
         int maxY = stars.stream().map(s -> s.point.y).max(Comparator.naturalOrder()).get();
-        int max = Math.max(maxX, maxY) + 1;
-        int min = Math.min(minX, minY);
 
         String[][] grid = new String[maxX-minX+1][maxY-minY+1];
         MatrixHelper.inititalizeGrid(grid, ".");
@@ -99,10 +90,6 @@ public class day10 extends DayBase {
             this.speed = new Point(xVel,yVel);
         }
 
-        public void scaleStar(int x, int y) {
-            this.point = new Point(Math.abs(x) + pointOriginal.x, Math.abs(y)  + pointOriginal.y);
-        }
-
         void increment() {
             point.x += speed.x;
             point.y += speed.y;
@@ -112,14 +99,6 @@ public class day10 extends DayBase {
             point.x -= speed.x;
             point.y -= speed.y;
         }
-
-
-        public Star(Point point, Point speed) {
-            this.point = point;
-            this.speed = speed;
-        }
-
-
 
         public boolean updateGrid(String[][] grid) {
             if(point.x >= 0  && point.y >= 0 ) {
@@ -141,16 +120,6 @@ public class day10 extends DayBase {
                     "current=" + point +
                     ", speed=" + speed +
                     '}';
-        }
-
-        public boolean updateIncrementAndGrid(String[][] grid) {
-            if(point.x >= 0  && point.y >= 0 ) {
-                if(point.x < grid.length && point.y < grid[0].length) {
-                    grid[point.x][point.y] = ".";
-                }
-            }
-            increment();
-            return updateGrid(grid);
         }
     }
 }
