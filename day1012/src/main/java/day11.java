@@ -53,13 +53,14 @@ public class day11 extends DayBase {
 //        System.out.println("grid[122][79]:" + grid[122][79]);
 //        System.out.println("grid[217][196]:" + grid[217][196]);
 
-        MatrixHelper.printGrid(grid, false);
+        //MatrixHelper.printGrid(grid, true, 15);
         int finalMax = 0;
 	    int x=0,y=0;
 	    int finalFuelCellSize = 0;
 
         int[][] fuelAnswers = new int[size+1][size+1];
 
+        ///use a pattern of growing the cells in the tiny loops:
         //x123
         //1123
         //2223
@@ -68,11 +69,15 @@ public class day11 extends DayBase {
 	    for( int fuelCellSize = 1; fuelCellSize < 300; fuelCellSize ++) {
             for (int i = 1; i < 300 - fuelCellSize + 1; i++) {
                 for (int j = 1; j < 300 - fuelCellSize + 1; j++) {
-                    int max = 0;
+                    int max = fuelAnswers[i][j];
+                    //for both tinyloops, in the calc use (fuelCellSize-1) because fuelcell starts at 1...
                     for (int tinyX = 0; tinyX < fuelCellSize; tinyX++) {
-                        for (int tinyY = 0; tinyY < fuelCellSize; tinyY++) {
-                            max += grid[i + tinyX][j + tinyY];
-                        }
+                        max += grid[i + tinyX][j+fuelCellSize-1];
+                    }
+
+                    /// use limit with (fuelCellSize - 1) to not double count the point
+                    for (int tinyY = 0; tinyY < fuelCellSize - 1 ; tinyY++) {
+                        max += grid[i + fuelCellSize-1][j + tinyY];
                     }
 
                     fuelAnswers[i][j] = max;
@@ -82,6 +87,10 @@ public class day11 extends DayBase {
                         x = i;
                         y = j;
                         finalFuelCellSize = fuelCellSize;
+                    }
+
+                    if( i == 1 && j ==1 ){
+                        //MatrixHelper.printGrid(grid, true, 15);
                     }
                 }
             }
