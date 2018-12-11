@@ -29,4 +29,19 @@ public class MatrixHelper {
             }
         }
     }
+
+    public static void printGrid(int[][] grid, boolean force) {
+        System.out.println("----------------------------------------------------");
+        for (int i = 0; i < grid.length  ; i ++) {
+            for (int j = 0; j < grid[i].length; j ++) {
+                if((force && i < 50 && j <50) || grid.length < 15) {
+                    System.out.print(grid[i][j] + " ");
+                }
+            }
+
+            if((force && i < 50) || grid.length < 15) {
+                System.out.println("");
+            }
+        }
+    }
 }
