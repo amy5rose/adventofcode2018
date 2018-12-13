@@ -69,7 +69,7 @@ public class day4star2 extends DayBase {
 	}
 
 	@Override
-	public String findAnswer(List<String> list) {
+	public String findAnswer(List<String> list, boolean isSample) {
 		List<guard> guards = new ArrayList<guard>();
 		Collections.sort(list);
 
