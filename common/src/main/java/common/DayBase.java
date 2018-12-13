@@ -29,7 +29,7 @@ public abstract class DayBase {
         inputList = read.readInput(getRealInputString());
         System.out.println("final inputList:" + inputList.size());
 
-        String finalAnswer = findAnswer(inputList);
+        String finalAnswer = findAnswer(inputList, false);
         System.out.println("final answer:" + finalAnswer);
 
         endTime = System.currentTimeMillis();
@@ -41,5 +41,9 @@ public abstract class DayBase {
 
     public abstract String getRealInputString();
 
-    public abstract String findAnswer(List<String> list);
+    public String findAnswer(List<String> list) {
+        return findAnswer(list, true);
+    }
+
+    public abstract String findAnswer(List<String> list, boolean isSample);
 }

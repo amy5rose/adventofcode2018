@@ -29,7 +29,7 @@ public class day10 extends DayBase {
         return "10input2.txt";
     }
 
-    public String findAnswer(List<String> list) {
+    public String findAnswer(List<String> list, boolean isSample) {
 	    ArrayList<Star> stars = new ArrayList<>();
 
 	    int max = 0;

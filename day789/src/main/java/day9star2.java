@@ -30,7 +30,7 @@ public class day9star2 extends DayBase {
         return "9input.txt";
     }
 
-    public String findAnswer(List<String> list) {
+    public String findAnswer(List<String> list, boolean isSample) {
         String[] listS = list.get(0).split(" ");
         int players = Integer.valueOf(listS[0]);
         int marbles = Integer.valueOf(listS[6]) * 100;

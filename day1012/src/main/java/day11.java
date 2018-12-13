@@ -29,7 +29,7 @@ public class day11 extends DayBase {
         return "1133";
     }
 
-    public String findAnswer(List<String> list) {
+    public String findAnswer(List<String> list, boolean isSample) {
 	    int size = 300;
 	    int[][] grid = new int[size+1][size+1];
 
