@@ -32,12 +32,11 @@ public class day18 extends DayBase {
   }
 
   public String findAnswer(List<String> list, boolean isSample) {
-    //create gridFirst in array
     String[][] gridFirst;
     String[][] gridNew;
     String[][] gridTemp;
 
-    HashMap<String, String> answers = new HashMap<>();
+    HashMap<String, Integer> answers = new HashMap<>();
 
     if (isSample) {
       gridFirst = new String[10][10];
@@ -61,49 +60,49 @@ public class day18 extends DayBase {
     MatrixHelper.printGrid(gridFirst);
 
     current = next.toString();
-    for (int minute = 1; minute <= (isSample? 10 : 1000000000 ) ; minute++) {
-      if(answers.containsKey(current)) {
-        current = answers.get(current);
-        gridFirst = null;
-      } else {
-        for (int i = 0; i < list.size(); i++) {
-          for (int index = 0; index < gridFirst.length; index++) {
-            String piece = getNextState(gridFirst, i, index);
-            gridNew[i][index] = piece;
-            next.append(piece);
-          }
-        }
-        //MatrixHelper.printGrid(gridNew, false);
-        answers.put(current, next.toString());
-        current = next.toString();
-        gridTemp = gridNew;
-        gridNew = gridFirst;
-        gridFirst = gridTemp;
+    int firstMinute = 0;
+    int currentMinute = 0;
+    boolean found = false;
+    int solution = (isSample? 10 : 1000000000 );
+    for (int minute = 1; minute <= solution ; minute++) {
+      if( !found && answers.containsKey(current)) {
+        firstMinute = answers.get(current);
+        currentMinute = minute;
+
+        int repeat = currentMinute - firstMinute;
+        //firstMinute + (repeat * times) = solution;
+        int time = (solution - firstMinute) / repeat;
+        int diff = solution - (firstMinute + (repeat * time));
+        solution = currentMinute + diff;
+        found = true;
+
       }
+      for (int i = 0; i < list.size(); i++) {
+        for (int index = 0; index < gridFirst.length; index++) {
+          String piece = getNextState(gridFirst, i, index);
+          gridNew[i][index] = piece;
+          next.append(piece);
+        }
+      }
+      //MatrixHelper.printGrid(gridNew, false);
+      answers.put(current, minute);
+      current = next.toString();
+      next = new StringBuffer();
+      gridTemp = gridNew;
+      gridNew = gridFirst;
+      gridFirst = gridTemp;
     }
 
     int wooded = 0;
     int lumber = 0;
-    if(gridFirst == null) {
-      for( int i = 0; i < current.length(); i++) {
-        char piece = current.charAt(i);
-        if (WOODED.equals(piece)) {
+    MatrixHelper.printGrid(gridFirst);
+
+    for (int i = 0; i < list.size(); i++) {
+      for (int index = 0; index < gridFirst.length; index++) {
+        if (WOODED.equals(gridFirst[i][index])) {
           wooded++;
-        } else if (LUMBER.equals(piece)) {
+        } else if (LUMBER.equals(gridFirst[i][index])) {
           lumber++;
-        }
-      }
-    } else {
-
-      MatrixHelper.printGrid(gridFirst);
-
-      for (int i = 0; i < list.size(); i++) {
-        for (int index = 0; index < gridFirst.length; index++) {
-          if (WOODED.equals(gridFirst[i][index])) {
-            wooded++;
-          } else if (LUMBER.equals(gridFirst[i][index])) {
-            lumber++;
-          }
         }
       }
     }
@@ -124,18 +123,14 @@ public class day18 extends DayBase {
         if (i == 0 && j == 0) {
           continue; //skip the middle node.
         }
-
         if (WOODED.equals(grid[x + i][y + j])) {
           wooded++;
         }
         if (LUMBER.equals(grid[x + i][y + j])) {
           lumber++;
         }
-
-
       }
     }
-
 
     if (OPEN.equals(grid[x][y]) && wooded >= 3) {
       return WOODED;
