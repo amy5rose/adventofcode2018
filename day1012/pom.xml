@@ -11,9 +11,6 @@
 
     <artifactId>day1012</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>day16</module>
-    </modules>
     <dependencies>
         <dependency>
             <groupId>azgraggen</groupId>
